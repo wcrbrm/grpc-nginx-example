@@ -8,11 +8,11 @@ import (
 	cli "github.com/jawher/mow.cli"
 	log "github.com/sirupsen/logrus"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
 	"github.com/wcrbrm/grpc-nginx-example/common/logging"
+	"github.com/wcrbrm/grpc-nginx-example/core/auth"
 	pb "github.com/wcrbrm/grpc-nginx-example/core/auth/pb"
 )
 
@@ -28,19 +28,13 @@ func main() {
 	}
 }
 
-// server is used to implement auth. server
-type server struct{}
-
-func (s *server) AccountAuth(ctx context.Context, in *pb.AuthRequest) (*pb.AuthResponse, error) {
-	return &pb.AuthResponse{Message: "Hello " + in.Username}, nil
-}
 func startgRPCServer() {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", *appGrpcPort))
 	if err != nil {
 		log.WithError(err).Fatal("failed to listen")
 	}
 	s := grpc.NewServer()
-	pb.RegisterAuthServiceServer(s, &server{})
+	pb.RegisterAuthServiceServer(s, auth.NewAuthService())
 
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
