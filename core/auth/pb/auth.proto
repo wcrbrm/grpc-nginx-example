@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package pb;
+
+// The greeting service definition.
+service AuthService {
+  // AccountAuth
+  rpc AccountAuth(AuthRequest) returns (AuthResponse) {}
+}
+
+// The request message containing the user's name.
+message AuthRequest {
+  // username need to contain user name
+  string username = 1;
+  // password need to contain password
+  string password = 2;
+  // code (optional)  can contain code for authentication
+  string code = 3;
+}
+
+// AuthResponse - response to user authentication
+message AuthResponse {
+  // message can contain example
+  string message = 1;
+}
