@@ -2,7 +2,7 @@ module github.com/wcrbrm/grpc-nginx-example
 
 require (
 	github.com/amsokol/mongo-go-driver-protobuf v1.0.0-rc5 // indirect
-	github.com/amsokol/protoc-gen-gotag v0.2.1 // indirect
+	github.com/amsokol/protoc-gen-gotag v0.2.1
 	github.com/fatih/structtag v1.0.0 // indirect
 	github.com/gin-gonic/gin v1.4.0 // indirect
 	github.com/golang/protobuf v1.3.2

@@ -1,8 +1,9 @@
 syntax = "proto3";
 
+import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-swagger/options/annotations.proto";
-import "google/protobuf/wrappers.proto";
+import "protoc-gen-gotag/tagger/tagger.proto";
 
 option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
   info: {
@@ -100,6 +101,7 @@ service AuthService {
   rpc AccountAuth(AuthRequest) returns (AuthResponse) {
     option (google.api.http) = {
       post: "/accounts/auth"
+      body: "*"
     };
   }
 }

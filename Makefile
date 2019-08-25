@@ -1,8 +1,11 @@
 PROTOC_VERSION=3.9.1
 PROTOC_ZIP=protoc-${PROTOC_VERSION}-linux-x86_64.zip
-PROTOC_INCLUDES= \
-    -I$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
-	-I$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/ 
+PROTOC_PATH= \
+    --proto_path=. \
+	--proto_path=$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
+	--proto_path=$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/ \
+	--proto_path=$$GOPATH/src/github.com/amsokol/
+
 PROTOC_PLUGINS=grpc
 
 all:
@@ -10,10 +13,13 @@ all:
 .PHONY: proto auth up down deps redoc
 
 proto:
-	protoc -I . $(PROTOC_INCLUDES) \
-		--go_out=plugins=$(PROTOC_PLUGINS):. \
+	protoc $(PROTOC_PATH) \
 		--grpc-gateway_out=logtostderr=true:. \
 		--swagger_out=json_names_for_fields=true:. \
+		--go_out=plugins=$(PROTOC_PLUGINS):. \
+		./core/auth/pb/*.proto
+	protoc $(PROTOC_PATH) \
+		--gotag_out=xxx="bson+\"-\"",output_path=./core/auth/pb:.\
 		./core/auth/pb/*.proto
 
 auth:
@@ -38,6 +44,8 @@ deps:
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
 	go get -u google.golang.org/grpc
+	go get -u github.com/amsokol/mongo-go-driver-protobuf
+	go get -u github.com/amsokol/protoc-gen-gotag
 	sudo npm install -g redoc-cli
 
 redoc:

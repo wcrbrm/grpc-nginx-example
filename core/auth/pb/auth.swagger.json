@@ -52,6 +52,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AuthRequest"
+            }
+          }
+        ],
         "tags": [
           "AuthService"
         ]
@@ -59,6 +69,24 @@
     }
   },
   "definitions": {
+    "AuthRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "title": "username need to contain user name"
+        },
+        "password": {
+          "type": "string",
+          "title": "password need to contain password"
+        },
+        "code": {
+          "type": "string",
+          "title": "code (optional) can contain code for authentication"
+        }
+      },
+      "description": "The request message containing the user's name."
+    },
     "AuthResponse": {
       "type": "object",
       "properties": {
