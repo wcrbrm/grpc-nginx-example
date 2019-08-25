@@ -1,0 +1,11 @@
+{
+    "protoc": {
+        "path": "/usr/local/bin/protoc",
+        "options": [
+            "--proto_path=${env.GOPATH}/src",
+            "--proto_path=${env.GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis", 
+	        "--proto_path=${env.GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/", 
+	        "--proto_path=${env.GOPATH}/src/github.com/amsokol/"
+        ]
+    }
+}
