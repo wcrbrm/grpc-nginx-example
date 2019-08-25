@@ -1,11 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "core/auth/pb/auth.proto",
-    "version": "version not set"
+    "title": "Some useful API",
+    "description": "this API was suppose to do domething useful",
+    "version": "1.0"
   },
+  "host": "localhost",
   "schemes": [
-    "http",
     "https"
   ],
   "consumes": [
@@ -14,17 +15,88 @@
   "produces": [
     "application/json"
   ],
-  "paths": {},
+  "paths": {
+    "/accounts/auth": {
+      "post": {
+        "summary": "AccountAuth is a public endpoint for authorization",
+        "operationId": "AccountAuth",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          },
+          "400": {
+            "description": "Client Request Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Access Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Page Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Server Side Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "tags": [
+          "AuthService"
+        ]
+      }
+    }
+  },
   "definitions": {
-    "pbAuthResponse": {
+    "AuthResponse": {
       "type": "object",
       "properties": {
+        "error": {
+          "$ref": "#/definitions/ErrorResponse"
+        },
         "message": {
           "type": "string",
           "title": "message can contain example"
         }
       },
       "title": "AuthResponse - response to user authentication"
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "example": {
+        "code": 3000,
+        "message": "Something went wrong",
+        "request_id": "0cf361e1-4b44-483d-a159-54dabdf7e814"
+      },
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "title": "code is numeric code for the error that occured"
+        },
+        "requestId": {
+          "type": "string",
+          "title": "request_id is ID for tracing. use it in displaying errors and troubleshooting"
+        },
+        "error": {
+          "type": "string",
+          "title": "error contains the human-readable description of the error"
+        }
+      },
+      "required": [
+        "message"
+      ]
     }
   }
 }

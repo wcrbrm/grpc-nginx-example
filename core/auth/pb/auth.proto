@@ -1,13 +1,78 @@
 syntax = "proto3";
 
-package pb;
-
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
 import "google/protobuf/wrappers.proto";
 
-// The greeting service definition.
-service AuthService {
-  // AccountAuth
-  rpc AccountAuth(AuthRequest) returns (AuthResponse) {}
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+      title: "Some useful API";
+      description: "this API was suppose to do domething useful";
+      version: "1.0";
+  }
+  host: "localhost";
+  schemes: HTTPS;
+	consumes: "application/json";
+  produces: "application/json";
+  responses: {
+    key: "400";
+    value: {
+      description: "Client Request Error";
+      schema: {
+        json_schema: {
+          ref: ".ErrorResponse";
+        }
+      }
+    }
+  }
+  responses: {
+    key: "403";
+    value: {
+      description: "Access Forbidden";
+      schema: {
+        json_schema: {
+          ref: ".ErrorResponse";
+        }
+      }
+    }
+  }
+  responses: {
+    key: "404";
+    value: {
+      description: "Page Not Found";
+      schema: {
+        json_schema: {
+          ref: ".ErrorResponse";
+        }
+      }
+    }
+  }
+  responses: {
+    key: "500";
+    value: {
+      description: "Server Side Error",
+      schema: {
+        json_schema: {
+          ref: ".ErrorResponse";
+        }
+      }
+    }
+  }
+};
+
+message ErrorResponse {
+  // code is numeric code for the error that occured
+  google.protobuf.Int32Value code = 1;
+  // request_id is ID for tracing. use it in displaying errors and troubleshooting
+  google.protobuf.StringValue request_id = 2;
+  // error contains the human-readable description of the error
+  string error = 3;
+  option (grpc.gateway.protoc_gen_swagger.options.openapiv2_schema) = {
+    json_schema: {
+      required: ["message"]; 
+    },
+    example: { value: '{ "code": 3000, "message": "Something went wrong", "request_id": "0cf361e1-4b44-483d-a159-54dabdf7e814" }' }
+  };
 }
 
 // The request message containing the user's name.
@@ -22,6 +87,19 @@ message AuthRequest {
 
 // AuthResponse - response to user authentication
 message AuthResponse {
-  // message can contain example
-  string message = 1;
+  oneof oneof_value {
+    ErrorResponse error = 1;
+    // message can contain example
+    string message = 2;
+  }
+}
+
+// The greeting service definition.
+service AuthService {
+  // AccountAuth is a public endpoint for authorization
+  rpc AccountAuth(AuthRequest) returns (AuthResponse) {
+    option (google.api.http) = {
+      post: "/accounts/auth"
+    };
+  }
 }

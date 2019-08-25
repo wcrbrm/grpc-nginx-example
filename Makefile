@@ -1,18 +1,19 @@
 PROTOC_VERSION=3.9.1
 PROTOC_ZIP=protoc-${PROTOC_VERSION}-linux-x86_64.zip
-PROTOC_INCLUDES := -I$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
+PROTOC_INCLUDES= \
+    -I$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 	-I$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/ 
+PROTOC_PLUGINS=grpc
 
 all:
 
 .PHONY: proto auth up down deps redoc
 
 proto:
-	protoc -I . --go_out=plugins=grpc:. ./core/auth/pb/*.proto
-
-swagger:
 	protoc -I . $(PROTOC_INCLUDES) \
-		--swagger_out=. \
+		--go_out=plugins=$(PROTOC_PLUGINS):. \
+		--grpc-gateway_out=logtostderr=true:. \
+		--swagger_out=json_names_for_fields=true:. \
 		./core/auth/pb/*.proto
 
 auth:
