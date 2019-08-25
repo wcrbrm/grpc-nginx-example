@@ -33,6 +33,7 @@ deps:
 	sudo unzip -o ${PROTOC_ZIP} -d /usr/local include/*
 	rm -f ${PROTOC_ZIP}
 	go get -u github.com/golang/protobuf/protoc-gen-go
+	go get -u github.com/amsokol/protoc-gen-gotag
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
 	go get -u google.golang.org/grpc

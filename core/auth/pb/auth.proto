@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package pb;
 
+import "google/protobuf/wrappers.proto";
+
 // The greeting service definition.
 service AuthService {
   // AccountAuth
@@ -14,8 +16,8 @@ message AuthRequest {
   string username = 1;
   // password need to contain password
   string password = 2;
-  // code (optional)  can contain code for authentication
-  string code = 3;
+  // code (optional) can contain code for authentication
+  google.protobuf.StringValue code = 3;
 }
 
 // AuthResponse - response to user authentication
