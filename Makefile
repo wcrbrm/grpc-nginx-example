@@ -49,3 +49,4 @@ deps:
 	sudo npm install -g redoc-cli
 
 redoc:
+	redoc-cli serve ./core/auth/pb/auth.swagger.json 
