@@ -12,7 +12,7 @@ proto:
 
 swagger:
 	protoc -I . $(PROTOC_INCLUDES) \
-		--swagger_out=json_names_for_fields=true:. \
+		--swagger_out=. \
 		./core/auth/pb/*.proto
 
 auth:
