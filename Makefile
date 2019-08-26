@@ -4,7 +4,7 @@ PROTOC_PATH= \
     --proto_path=. \
 	--proto_path=$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 	--proto_path=$$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/ \
-	--proto_path=$$GOPATH/src/github.com/amsokol/
+	--proto_path=$$GOPATH/src/
 
 PROTOC_PLUGINS=grpc
 

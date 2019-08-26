@@ -3,7 +3,7 @@ syntax = "proto3";
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-swagger/options/annotations.proto";
-import "protoc-gen-gotag/tagger/tagger.proto";
+import "github.com/amsokol/protoc-gen-gotag/tagger/tagger.proto";
 
 option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
   info: {
@@ -61,6 +61,79 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
   }
 };
 
+// ID is a type that requires a field to have unique value that can later will be used
+// for indexed lookups and aggregations.
+// type string ID;
+message ID {
+  // The string value.
+  string value = 1;
+}
+  
+// Lang code per ISO 639-1
+enum Lang {
+  // English (default)
+  EN = 0;
+  // French
+  FR = 1;
+  // Spanish
+  ES = 2;
+  // German
+  DE = 3;
+  // Dutch
+  NL = 4;
+	// Italian
+	IT = 5;
+	// Portugese
+	PT = 6;
+	// Japanese
+	JA = 7;
+	// Chinese
+	ZH = 8;
+	// Polish
+	PL = 9;
+	// Russian
+	RU = 10;
+	// Swedish
+	SV = 11;
+	// Arabic
+	AR = 12;
+	// Greek
+	EL = 13;
+  // Norwegian
+  NO = 14;
+}
+
+// DisplayLocale sets user locale preferences, the backend
+// will format responses to match these preferences.
+message DisplayLocale {
+  // lang code according to ISO 639-1
+  Lang lang = 1;
+  // region as string
+  google.protobuf.StringValue region = 2;
+  // desired currency name
+  google.protobuf.StringValue currency = 3;
+}
+
+
+// Defines pagination rules, typically for listing requests.
+message Pagination {
+  // From specifies the offset ID to start listing from (excluding). This field can be left
+  // empty, meaning that the listing should start from the beginning, otherwise use value returned
+  // in **Last** field.
+  google.protobuf.StringValue from = 1;
+
+  // Limit the amount of items returned by specifying the latest.
+  google.protobuf.StringValue to = 2;
+
+  // Last is filled with last ID in the list in listing responses. If you ask 20 items,
+  // this field will contain 20th ID. Use this value in **From** field on the next list request
+  // to continue listing from that point (excluding).
+  google.protobuf.StringValue last = 3;
+
+  // Limit specify the maximum results count to return. Default limit (if not set) is 20.
+  google.protobuf.Int64Value limit = 4;
+}
+
 message ErrorResponse {
   // code is numeric code for the error that occured
   google.protobuf.Int32Value code = 1;
@@ -68,11 +141,12 @@ message ErrorResponse {
   google.protobuf.StringValue request_id = 2;
   // error contains the human-readable description of the error
   string error = 3;
+
   option (grpc.gateway.protoc_gen_swagger.options.openapiv2_schema) = {
     json_schema: {
-      required: ["message"]; 
+      required: ["msg"]; 
     },
-    example: { value: '{ "code": 3000, "message": "Something went wrong", "request_id": "0cf361e1-4b44-483d-a159-54dabdf7e814" }' }
+    example: { value: '{ "code": 3000, "msg": "Something went wrong", "request_id": "0cf361e1-4b44-483d-a159-54dabdf7e814" }' }
   };
 }
 
@@ -88,11 +162,8 @@ message AuthRequest {
 
 // AuthResponse - response to user authentication
 message AuthResponse {
-  oneof oneof_value {
-    ErrorResponse error = 1;
-    // message can contain example
-    string message = 2;
-  }
+  // result can contain example
+  string result = 2;
 }
 
 // The greeting service definition.

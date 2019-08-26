@@ -2,15 +2,15 @@ package auth
 
 import (
 	"context"
+	"fmt"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/wcrbrm/grpc-nginx-example/common/logging"
-	"github.com/wcrbrm/grpc-nginx-example/core/auth/pb"
+	pb "github.com/wcrbrm/grpc-nginx-example/core/auth/pb"
 )
 
-// authServiceServerImpl is the actual of pb.AuthServiceServer
+// authServiceServerImpl is the actual of auth.AuthServiceServer
 type authServiceServerImpl struct {
-	pb.AuthServiceServer
 	fields log.Fields
 }
 
@@ -22,6 +22,10 @@ func NewAuthService() pb.AuthServiceServer {
 }
 
 func (s *authServiceServerImpl) AccountAuth(ctx context.Context, in *pb.AuthRequest) (*pb.AuthResponse, error) {
-	log.WithFields(logging.WithFn(log.Fields{"username": in.Username, "code": in.Code})).Info("auth")
-	return &pb.AuthResponse{Message: "Hello " + in.Username}, nil
+	ID := pb.ID{Value: "RANDOM_ID"}
+	Result := fmt.Sprintf("Hello %v, your ID is %v", in.Username, ID)
+
+	log.WithFields(logging.WithFn(log.Fields{"username": in.Username, "code": in.Code})).
+		Info(Result)
+	return &pb.AuthResponse{Result: Result}, nil
 }

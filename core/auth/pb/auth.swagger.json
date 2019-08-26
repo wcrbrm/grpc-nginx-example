@@ -90,12 +90,9 @@
     "AuthResponse": {
       "type": "object",
       "properties": {
-        "error": {
-          "$ref": "#/definitions/ErrorResponse"
-        },
-        "message": {
+        "result": {
           "type": "string",
-          "title": "message can contain example"
+          "title": "result can contain example"
         }
       },
       "title": "AuthResponse - response to user authentication"
@@ -104,7 +101,7 @@
       "type": "object",
       "example": {
         "code": 3000,
-        "message": "Something went wrong",
+        "msg": "Something went wrong",
         "request_id": "0cf361e1-4b44-483d-a159-54dabdf7e814"
       },
       "properties": {
@@ -123,7 +120,7 @@
         }
       },
       "required": [
-        "message"
+        "msg"
       ]
     }
   }
